@@ -3,7 +3,7 @@ import { CoursePage } from "../util"
 
 test("Navbar links working properly", async ({ page }) => {
   const course = new CoursePage(page, "course")
-  await course.goto("/")
+  await course.goto("")
 
   const navbar = await page
     .locator("#course-main-content div")
@@ -16,14 +16,16 @@ test("Navbar links working properly", async ({ page }) => {
   for (let i = 0; i < linkCount; i++) {
     const link = await navbar.locator("a").nth(i)
     const url = await link.getAttribute("href")
-    await link.click()
+    const goto_url = url?.replace("/courses/ocw-ci-test-course/", "")
+    const response = await course.goto(goto_url)
+    await expect(response?.status()).toBeLessThan(400)
     await expect(page.url()).toContain(url)
   }
 })
 
 test("Navbar Expanding Properly", async ({ page }) => {
   const course = new CoursePage(page, "course")
-  await course.goto("/")
+  await course.goto("")
 
   const expandBtn = page.getByRole("button", {
     name: "Subsections for Section 1 Menu Title",
