@@ -43,11 +43,13 @@ test("Navbar Expanding Properly", async ({ page }) => {
     name: "Subsections for Section 1 Menu Title",
   })
   await expandBtn.click()
+  await new Promise((f) => setTimeout(f, 1000)) // allow enough time for the animation to complete
+  
   const subHeading = await page.getByRole("link", {
     name: "Subsection 1a Menu Title",
   })
+  
   await expect(subHeading).toBeVisible()
-  await new Promise((f) => setTimeout(f, 1000)) // 1 sec delay, without this test runs so fast and the next click event occurs when the button is disabled
   await expandBtn.click()
   await expect(subHeading).toBeHidden()
 })
